@@ -86,7 +86,7 @@ class FuzzyCMean:
         for i in range(len(self.U)):
             for j in range(len(self.U[i])):
                 for k in range(len(self.C)):
-                    sum0 += ((self.X[i] - self.C[j]) / (self.X[i] - self.C[k])) ** (2 / (self.m - 1))
+                    sum0 += (distance(self.X[i], self.C[j]) / distance(self.X[i], self.C[k])) ** (2 / (self.m - 1))
                 self.U[i][j] = sum0 ** (-1)
                 sum0 = 0
 
