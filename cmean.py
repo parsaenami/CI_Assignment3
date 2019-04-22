@@ -31,7 +31,7 @@ class FuzzyCMean:
     def random_data_generator(self):
         cell, data_temp = [], []
 
-        for i in range(self.limit ** self.dimension):
+        for i in range((self.limit ** self.dimension)):
             if r.random() > self.randomness:
                 for d in range(self.dimension):
                     cell.append(r.randrange(self.limit))
@@ -72,13 +72,12 @@ class FuzzyCMean:
         sum0, sum1 = 0, 0
 
         for c in range(len(self.C)):
-            for u in self.U:
-                for x in self.X:
-                    sum0 += u[c] ** self.m
-                    sum1 += (u[c] ** self.m) * x[c]
-
-            self.C[c] = sum1 / sum0
-            sum0, sum1 = 0, 0
+            for cc in range(len(self.C[c])):
+                for u in range(len(self.U)):
+                    sum0 += self.U[u][c] ** self.m
+                    sum1 += ((self.U[u][c] ** self.m) * self.X[u][cc])
+                self.C[c][cc] = sum1 / sum0
+                sum0, sum1 = 0, 0
 
     def update_membership(self):
         sum0 = 0
@@ -91,31 +90,30 @@ class FuzzyCMean:
                 sum0 = 0
 
     def coloring(self):
-        colors = []
+        colors_out = []
 
         for x in range(len(self.X)):
-            colors.append(self.U[x].index(max(self.U[x])))
+            colors_out.append(self.U[x].index(max(self.U[x])))
 
-        return colors
+        return colors_out
 
 
 if __name__ == '__main__':
-    c_mean = FuzzyCMean(2, 4, 100)
+    c_mean = FuzzyCMean(2, 3, 50, randomness=0.96, limit=100)
 
-    for it in c_mean.iterations:
+    for it in range(c_mean.iterations):
         c_mean.update_centers()
         c_mean.update_membership()
 
+    data = np.array(c_mean.X)
+    centers = np.array(c_mean.C)
+    colors = np.array(c_mean.coloring())
 
-
-
-
-
-
-
-
-
-
-
-    # data = np.array(c_mean.X)
-    # centers = np.array(c_mean.C)
+    plt.scatter(x=data[:, 0], y=data[:, 1], s=10, c=colors)
+    plt.scatter(x=centers[:, 0], y=centers[:, 1], s=30, marker='D', c='red', label='Centers')
+    plt.legend()
+    plt.minorticks_on()
+    plt.grid(True)
+    plt.title(f'Fuzzy C-Means Clustering:\n{c_mean.c_cluster} clusters / {c_mean.iterations} iterations / {c_mean.X.__len__()} data in {c_mean.dimension} dimensions')
+    plt.savefig('FuzzyCMeansClustering.png', bbox_inches='tight')
+    plt.show()
