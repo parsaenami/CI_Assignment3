@@ -16,12 +16,12 @@ def distance(x, c):
 
 class FuzzyCMean:
 
-    def __init__(self, dimension, c_cluster, iterations, limit=100, randomness=0.99, m=2):
+    def __init__(self, dimension, c_cluster, iterations, axis_limit=100, randomness=0.99, m=2):
         self.iterations = iterations
         self.m = m
         self.c_cluster = c_cluster
         self.randomness = randomness
-        self.limit = limit
+        self.axis_limit = axis_limit
         self.dimension = dimension
 
         self.C = self.center_initialize()
@@ -31,10 +31,10 @@ class FuzzyCMean:
     def random_data_generator(self):
         cell, data_temp = [], []
 
-        for i in range((self.limit ** self.dimension)):
+        for i in range((self.axis_limit ** self.dimension)):
             if r.random() > self.randomness:
                 for d in range(self.dimension):
-                    cell.append(r.randrange(self.limit))
+                    cell.append(r.randrange(self.axis_limit))
 
                 data_temp.append(cell.copy())
                 cell.clear()
@@ -61,7 +61,7 @@ class FuzzyCMean:
 
         for n in range(self.c_cluster):
             for d in range(self.dimension):
-                cell.append(r.randrange(self.limit))
+                cell.append(r.randrange(self.axis_limit))
 
             centers_out.append(cell.copy())
             cell.clear()
@@ -99,7 +99,7 @@ class FuzzyCMean:
 
 
 if __name__ == '__main__':
-    c_mean = FuzzyCMean(2, 3, 50, randomness=0.96, limit=100)
+    c_mean = FuzzyCMean(2, 3, 50, randomness=0.96, axis_limit=100)
 
     for it in range(c_mean.iterations):
         c_mean.update_centers()
@@ -108,6 +108,7 @@ if __name__ == '__main__':
     data = np.array(c_mean.X)
     centers = np.array(c_mean.C)
     colors = np.array(c_mean.coloring())
+    print('Cluster Centers:\n', centers)
 
     plt.scatter(x=data[:, 0], y=data[:, 1], s=10, c=colors)
     plt.scatter(x=centers[:, 0], y=centers[:, 1], s=30, marker='D', c='red', label='Centers')
