@@ -90,9 +90,32 @@ class FuzzyCMean:
                 self.U[i][j] = sum0 ** (-1)
                 sum0 = 0
 
+    def coloring(self):
+        colors = []
+
+        for x in range(len(self.X)):
+            colors.append(self.U[x].index(max(self.U[x])))
+
+        return colors
+
 
 if __name__ == '__main__':
     c_mean = FuzzyCMean(2, 4, 100)
 
-    data = np.array(c_mean.X)
-    centers = np.array(c_mean.C)
+    for it in c_mean.iterations:
+        c_mean.update_centers()
+        c_mean.update_membership()
+
+
+
+
+
+
+
+
+
+
+
+
+    # data = np.array(c_mean.X)
+    # centers = np.array(c_mean.C)
