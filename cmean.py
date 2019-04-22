@@ -4,9 +4,20 @@ import random as r
 import matplotlib.pyplot as plt
 
 
+def distance(x, c):
+    dim = x.__len__()
+    sum0 = 0
+
+    for d in range(dim):
+        sum0 += (x[d] - c[d]) ** 2
+
+    return sum0 ** 0.5
+
+
 class FuzzyCMean:
 
-    def __init__(self, dimension, c_cluster, limit=100, randomness=0.99, m=2):
+    def __init__(self, dimension, c_cluster, iterations, limit=100, randomness=0.99, m=2):
+        self.iterations = iterations
         self.m = m
         self.c_cluster = c_cluster
         self.randomness = randomness
@@ -58,7 +69,7 @@ class FuzzyCMean:
         return centers_out
 
     def update_centers(self):
-        sum1, sum0 = 0, 0
+        sum0, sum1 = 0, 0
 
         for c in range(len(self.C)):
             for u in self.U:
@@ -67,21 +78,20 @@ class FuzzyCMean:
                     sum1 += (u[c] ** self.m) * x[c]
 
             self.C[c] = sum1 / sum0
+            sum0, sum1 = 0, 0
 
-    def update_membership(self, memberships_in):
-        pass
+    def update_membership(self):
+        sum0 = 0
 
-    def distance(self, x, c):
-        dim = x.__len__()
-        sum2 = 0
-
-        for d in range(dim):
-            sum2 += (x[d] - c[d]) ** 2
-
-        return sum2 ** (0.5)
+        for i in range(len(self.U)):
+            for j in range(len(self.U[i])):
+                for k in range(len(self.C)):
+                    sum0 += ((self.X[i] - self.C[j]) / (self.X[i] - self.C[k])) ** (2 / (self.m - 1))
+                self.U[i][j] = sum0 ** (-1)
+                sum0 = 0
 
 
-c_mean = FuzzyCMean(2, 4)
+c_mean = FuzzyCMean(2, 4, 100)
 # random_data = c_mean.random_data_generator()
 # membership_matrix = c_mean.random_membership_generator(random_data)
 # cluster_centers = c_mean.center_initialize()
