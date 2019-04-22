@@ -91,37 +91,8 @@ class FuzzyCMean:
                 sum0 = 0
 
 
-c_mean = FuzzyCMean(2, 4, 100)
-# random_data = c_mean.random_data_generator()
-# membership_matrix = c_mean.random_membership_generator(random_data)
-# cluster_centers = c_mean.center_initialize()
-data = np.array(c_mean.X)
-centers = np.array(c_mean.C)
+if __name__ == '__main__':
+    c_mean = FuzzyCMean(2, 4, 100)
 
-# print('random data = ', c_mean.X)
-# print('membership = ', c_mean.U)
-# print('centers = ', c_mean.C)
-
-# s0, s1, s2, s3 = 0, 0, 0, 0
-# for y in c_mean.U:
-#     s0 += y[0]
-#     s1 += y[1]
-#     s2 += y[2]
-#     s3 += y[3]
-# print('s0 = ', s0)
-# print('s1 = ', s1)
-# print('s2 = ', s2)
-# print('s3 = ', s3)
-
-##################### TEST AREA #####################
-# kmeans = KMeans(n_clusters=4)
-# kmeans.fit(data)
-# labels = kmeans.labels_
-#
-# # print(labels)
-#
-# plt.scatter(x=data[:, 0], y=data[:, 1], s=20, c=labels)
-# plt.scatter(x=centers[:, 0], y=centers[:, 1], s=30, marker='D', c='black')
-# plt.grid(True)
-# plt.show()
-#####################################################
+    data = np.array(c_mean.X)
+    centers = np.array(c_mean.C)
