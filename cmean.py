@@ -7,11 +7,12 @@ import matplotlib.pyplot as plt
 def random_data_generator(dimension, limit=100, randomness=0.99):
     cell, data_temp = [], []
 
-    for i in range(100 ** dimension):
+    for i in range(limit ** dimension):
         if r.random() > randomness:
             for d in range(dimension):
                 cell.append(r.randrange(limit))
-            data_temp.append(cell)
+            data_temp.append(cell.copy())
+            cell.clear()
 
     return data_temp
 
@@ -19,15 +20,23 @@ def random_data_generator(dimension, limit=100, randomness=0.99):
 # TODO: change it like previous function
 def random_membership_generator(data_in, dimension):
     membership = np.random.dirichlet(np.ones(len(data_in)))
-    membership_temp, cell = [], []
+    membership_temp = []
 
     for j in range(dimension):
         for i in range(len(data_in)):
-            membership_temp.append(cell)
-        cell.append(membership[i])
+            if j == 0:
+                membership_temp.append([])
+            membership_temp[i].append(membership[i])
 
     return membership_temp
 
+# [
+# [62, 5],
+# [6, 1],
+# [64, 11],
+# [64, 44],
+# [21, 64]
+# ]
 
 def center_initialize(n_cluster, dimension, limit=100):
     cell, centers = [], []
@@ -40,8 +49,11 @@ def center_initialize(n_cluster, dimension, limit=100):
 
 
 random_data = random_data_generator(2)
-membership_matrix = random_membership_generator(random_data)
+membership_matrix = random_membership_generator(random_data, 2)
 data = np.array(random_data)
+
+print('random data = ', random_data)
+print('membership = ', membership_matrix)
 
 ##################### TEST AREA #####################
 kmeans = KMeans(n_clusters=4)
