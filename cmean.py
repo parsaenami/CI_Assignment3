@@ -1,7 +1,7 @@
-import numpy as np
-from sklearn.cluster import KMeans
 import random as r
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def distance(x, c):
@@ -115,6 +115,7 @@ if __name__ == '__main__':
     plt.legend()
     plt.minorticks_on()
     plt.grid(True)
-    plt.title(f'Fuzzy C-Means Clustering:\n{c_mean.c_cluster} clusters / {c_mean.iterations} iterations / {c_mean.X.__len__()} data in {c_mean.dimension} dimensions')
+    plt.title(
+        f'Fuzzy C-Means Clustering:\n{c_mean.c_cluster} clusters / {c_mean.iterations} iterations / {c_mean.X.__len__()} data in {c_mean.dimension} dimensions')
     plt.savefig('FuzzyCMeansClustering.png', bbox_inches='tight')
     plt.show()
