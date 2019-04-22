@@ -6,11 +6,16 @@ import matplotlib.pyplot as plt
 
 class FuzzyCMean:
 
-    def __init__(self, dimension, c_cluster, limit=100, randomness=0.99):
+    def __init__(self, dimension, c_cluster, limit=100, randomness=0.99, m=2):
+        self.m = m
         self.c_cluster = c_cluster
         self.randomness = randomness
         self.limit = limit
         self.dimension = dimension
+
+        self.C = self.center_initialize()
+        self.X = self.random_data_generator()
+        self.U = self.random_membership_generator()
 
     def random_data_generator(self):
         cell, data_temp = [], []
@@ -19,58 +24,84 @@ class FuzzyCMean:
             if r.random() > self.randomness:
                 for d in range(self.dimension):
                     cell.append(r.randrange(self.limit))
+
                 data_temp.append(cell.copy())
                 cell.clear()
 
         return data_temp
 
-    def random_membership_generator(self, data_in):
-        membership = np.random.dirichlet(np.ones(len(data_in)))
-        membership_temp = []
+    def random_membership_generator(self):
+        membership_temp, membership_list = [], []
 
-        for j in range(self.dimension):
-            for i in range(len(data_in)):
+        for n in range(self.c_cluster):
+            membership_list.append(np.random.dirichlet(np.ones(len(self.X))))
+
+        for j in range(self.c_cluster):
+            for i in range(len(self.X)):
                 if j == 0:
                     membership_temp.append([])
-                membership_temp[i].append(membership[i])
+
+                membership_temp[i].append(membership_list[j][i])
 
         return membership_temp
 
     def center_initialize(self):
-        cell, centers = [], []
+        cell, centers_out = [], []
+
         for n in range(self.c_cluster):
             for d in range(self.dimension):
                 cell.append(r.randrange(self.limit))
-            centers.append(cell.copy())
+
+            centers_out.append(cell.copy())
             cell.clear()
 
-        return centers
+        return centers_out
 
-    def update_centers(self, ):
-        pass
+    def update_centers(self):
+        sum1, sum0 = 0, 0
 
-    def update_membership(self, ):
+        for c in range(len(self.C)):
+            for u in self.U:
+                for x in self.X:
+                    sum0 += u[c] ** self.m
+                    sum1 += (u[c] ** self.m) * x[c]
+
+            self.C[c] = sum1 / sum0
+
+    def update_membership(self, memberships_in):
         pass
 
     def distance(self, x, c):
         dim = x.__len__()
-        sum = 0
+        sum2 = 0
+
         for d in range(dim):
-            sum += (x[d] - c[d]) ** 2
+            sum2 += (x[d] - c[d]) ** 2
 
-        return sum ** (0.5)
+        return sum2 ** (0.5)
 
 
-cmean = FuzzyCMean(2, 4)
-random_data = cmean.random_data_generator()
-membership_matrix = cmean.random_membership_generator(random_data)
-cluster_centers = cmean.center_initialize()
-data = np.array(random_data)
-centers = np.array(cluster_centers)
+c_mean = FuzzyCMean(2, 4)
+# random_data = c_mean.random_data_generator()
+# membership_matrix = c_mean.random_membership_generator(random_data)
+# cluster_centers = c_mean.center_initialize()
+data = np.array(c_mean.X)
+centers = np.array(c_mean.C)
 
-print('random data = ', random_data)
-print('membership = ', membership_matrix)
-print('centers = ', cluster_centers)
+# print('random data = ', c_mean.X)
+# print('membership = ', c_mean.U)
+# print('centers = ', c_mean.C)
+
+# s0, s1, s2, s3 = 0, 0, 0, 0
+# for y in c_mean.U:
+#     s0 += y[0]
+#     s1 += y[1]
+#     s2 += y[2]
+#     s3 += y[3]
+# print('s0 = ', s0)
+# print('s1 = ', s1)
+# print('s2 = ', s2)
+# print('s3 = ', s3)
 
 ##################### TEST AREA #####################
 # kmeans = KMeans(n_clusters=4)
