@@ -16,7 +16,7 @@ def distance(x, c):
 
 class FuzzyCMean:
 
-    def __init__(self, dimension, c_cluster, iterations, axis_limit=100, randomness=0.99, m=2):
+    def __init__(self, dimension, c_cluster, iterations, axis_limit, randomness, m):
         self.iterations = iterations
         self.m = m
         self.c_cluster = c_cluster
@@ -99,7 +99,23 @@ class FuzzyCMean:
 
 
 if __name__ == '__main__':
-    c_mean = FuzzyCMean(2, 3, 50, randomness=0.96, axis_limit=100)
+    print('Fuzzy C-Means Clustering:')
+    print('-------------------------')
+    print('1. Enter Data Dimensions:')
+    i1 = int(input())
+    print('2. Enter Number of Clusters:')
+    i2 = int(input())
+    print('3. Enter Number of Iterations:')
+    i3 = int(input())
+    print('4. Enter Axis Limit:')
+    i4 = int(input())
+    print('5. Enter Randomness Amount From 0 To 1:')
+    i5 = float(input())
+    print('6. Enter m:')
+    i6 = float(input())
+    print('-------------------------')
+
+    c_mean = FuzzyCMean(i1, i2, i3, i4, i5, i6)
 
     for it in range(c_mean.iterations):
         c_mean.update_centers()
