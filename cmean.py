@@ -111,7 +111,7 @@ if __name__ == '__main__':
     i4 = int(input())
     print('5. Enter Randomness Amount From 0 To 1:')
     i5 = float(input())
-    print('6. Enter m:')
+    print('6. Enter m anything above 1:')
     i6 = float(input())
     print('-------------------------')
 
@@ -132,6 +132,6 @@ if __name__ == '__main__':
     plt.minorticks_on()
     plt.grid(True)
     plt.title(
-        f'Fuzzy C-Means Clustering:\n{c_mean.c_cluster} clusters / {c_mean.iterations} iterations / {c_mean.X.__len__()} data in {c_mean.dimension} dimensions')
+        f'Fuzzy C-Means Clustering:\nm = {c_mean.m} / {c_mean.c_cluster} clusters / {c_mean.iterations} iterations / {c_mean.X.__len__()} data in {c_mean.dimension} dimensions')
     plt.savefig('FuzzyCMeansClustering.png', bbox_inches='tight')
     plt.show()
